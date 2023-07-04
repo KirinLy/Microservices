@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  catalogdb:
+    image:  mongo
+    container_name: mongo-shop
+    restart: always
+    volumes:
+      - mongo-shop-data:/data/db
+    ports:
+      - "27017:27017"
+
+  catalog.api:
+    container_name: catalog.api.v1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "Database__ConnectionString=mongodb://mongo-shop:270171"
+      - "ASPNETCORE_URLS=http://+:8080"
+    depends_on: 
+      - catalogdb
+    ports:
+      - "5000:8080"
+volumes:
+ mongo-shop-data:
+
+ 
