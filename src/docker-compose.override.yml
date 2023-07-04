@@ -14,7 +14,7 @@ services:
     container_name: catalog.api.v1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "Database__ConnectionString=mongodb://mongo-shop:270171"
+      - "Database__ConnectionString=mongodb://mongo-shop:27017"
       - "ASPNETCORE_URLS=http://+:8080"
     depends_on: 
       - catalogdb

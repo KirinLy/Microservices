@@ -73,7 +73,7 @@ namespace Catalog.API.Controllers
 
         [HttpPost()]
         [ProducesResponseType(typeof(Product), (int) HttpStatusCode.OK)]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+        public async Task<ActionResult<Product>> CreateProduct([FromBody]Product product)
         {
             await _productRepository.CreateProduct(product);
             return CreatedAtAction(nameof(GetProduct), new {id = product.Id}, product);
