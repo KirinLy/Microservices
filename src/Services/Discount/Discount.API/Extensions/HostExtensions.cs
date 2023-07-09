@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Discount.API.Data;
+﻿using Discount.API.Data;
 
 namespace Discount.API.Extensions
 {
@@ -11,6 +10,8 @@ namespace Discount.API.Extensions
             {
                 var serviceProvider = scope.ServiceProvider;
                 var dbContext = serviceProvider.GetRequiredService<IDiscountContext>();
+                var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+                logger.LogInformation("Migrating DB starting");
                 // check table coupon exist
                 var exist = dbContext.QueryFirstOrDefaultAsync<bool>(
                     "SELECT EXISTS (SELECT 1 FROM pg_tables WHERE Tablename = @Tablename)",
@@ -32,6 +33,7 @@ namespace Discount.API.Extensions
                         "INSERT INTO Coupon (Code, ProductName, Discount, Description) VALUES (@Code, @ProductName, @Discount, @Description)"
                         , new { Code = "TZHS98", ProductName = "IPhone", Discount = 20, Description = "Discount for Iphone"});
                 }
+                logger.LogInformation("Migrated DB");
             }
 
             return app;
