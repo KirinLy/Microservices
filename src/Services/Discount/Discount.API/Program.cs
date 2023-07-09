@@ -19,9 +19,9 @@ namespace Discount.API
 
             builder.Services.AddScoped<IDiscountContext, DiscountContext>();
             builder.Services.AddScoped<ICouponRepository, CouponRepository>();
-
+            
             var app = builder.Build();
-            app.SeedData();
+            app.MigrateData();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
