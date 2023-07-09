@@ -2,7 +2,6 @@ version: '3.4'
 
 services:
   catalogdb:
-    image:  mongo
     container_name: mongo-shop
     restart: always
     volumes:
@@ -10,18 +9,48 @@ services:
     ports:
       - "27017:27017"
   basketdb:
-    image: redis
     container_name: redis-shop
     restart: always
     ports:
       - "6379:6379"
+ 
+  discountdb:
+    container_name: postgres-shop
+    restart: always
+    environment:
+      POSTGRES_DB: DiscountDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: Abc12345
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-shop-data:/var/lib/postgresql/data
+ 
+  pgadmin:
+    container_name: pgadmin4-shop
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: Abc12345
+    restart: always
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin4-shop-data:/var/lib/pgadmin'
+
+  portainer:
+    container_name: portainer-shop
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+        - portainer-shop-data:/data
+        - /var/run/docker.sock:/var/run/docker.sock
 
   catalog.api:
     container_name: catalog.api.v1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Database__ConnectionString=mongodb://mongo-shop:27017"
-      - "ASPNETCORE_URLS=http://+:80"
     depends_on: 
       - catalogdb
     ports:
@@ -32,13 +61,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Cache__ConnectionString=redis-shop:6379"
-      - "ASPNETCORE_URLS=http://+:80"
     depends_on: 
       - basketdb
     ports:
       - "5001:80"
 
 volumes:
- mongo-shop-data:
+  mongo-shop-data:
+  portainer-shop-data:
+  postgres-shop-data:
+  pgadmin4-shop-data:
 
  
