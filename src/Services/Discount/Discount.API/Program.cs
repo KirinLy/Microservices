@@ -1,4 +1,5 @@
 using Discount.API.Data;
+using Discount.API.Extensions;
 using Discount.API.Repositories;
 
 namespace Discount.API
@@ -20,6 +21,7 @@ namespace Discount.API
             builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
             var app = builder.Build();
+            app.SeedData();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -32,7 +34,7 @@ namespace Discount.API
 
 
             app.MapControllers();
-
+            
             app.Run();
         }
     }
