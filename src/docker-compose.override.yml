@@ -61,8 +61,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "Cache__ConnectionString=redis-shop:6379"
+      - "GrpcSettings__DiscountUrl=http://discount.grpc"
     depends_on: 
       - basketdb
+      - discount.grpc
     ports:
       - "5001:80"
 
@@ -75,6 +77,16 @@ services:
       - discountdb
     ports:
       - "5002:80"
+
+  discount.grpc:
+    container_name: discount.grpc.v1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings__Default=User ID=admin;Password=Abc12345;Host=discountdb;Port=5432;Database=DiscountDB"
+    depends_on: 
+      - discountdb
+    ports:
+      - "5003:80"
 
 volumes:
   mongo-shop-data:
