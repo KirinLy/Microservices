@@ -24,17 +24,18 @@ namespace Discount.API.Extensions
                         dbContext.ExecuteAsync("CREATE TABLE Coupon " +
                                                "( Id SERIAL PRIMARY KEY," +
                                                "Code VARCHAR(20) NOT NULL," +
+                                               "ProductId VARCHAR(24) NOT NULL," +
                                                "ProductName VARCHAR(25) NOT NULL," +
                                                "Discount INTEGER NOT NULL," +
                                                "Description TEXT)").Wait();
 
                         dbContext.ExecuteAsync(
-                            "INSERT INTO Coupon (Code, ProductName, Discount, Description) VALUES (@Code, @ProductName, @Discount, @Description)"
-                            , new { Code = "TKO8", ProductName = "SamSung", Discount = 10, Description = "Discount for SamSung"});
+                            "INSERT INTO Coupon (Code, ProductId, ProductName, Discount, Description) VALUES (@Code, @ProductId, @ProductName, @Discount, @Description)"
+                            , new { Code = "TKO8", ProductId = "64a1a39f29628a040b3f4b6f", ProductName = "Iphone X", Discount = 1, Description = "Discount for Iphone X"});
 
                         dbContext.ExecuteAsync(
-                            "INSERT INTO Coupon (Code, ProductName, Discount, Description) VALUES (@Code, @ProductName, @Discount, @Description)"
-                            , new { Code = "TZHS98", ProductName = "IPhone", Discount = 20, Description = "Discount for Iphone"});
+                            "INSERT INTO Coupon (Code, ProductId, ProductName, Discount, Description) VALUES (@Code, @ProductId, @ProductName, @Discount, @Description)"
+                            , new { Code = "TKO8", ProductId = "64a1a3b11e8e30ed35c21ed0", ProductName = "Samsung note 10", Discount = 2, Description = "Discount for Samsung note 10"});
                     }
                     logger.LogInformation("Migrated DB");
                 }

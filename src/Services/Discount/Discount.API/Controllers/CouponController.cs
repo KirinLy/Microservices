@@ -32,15 +32,15 @@ namespace Discount.API.Controllers
             return Ok(coupon);
         }
 
-        [HttpGet("productName")]
+        [HttpGet("productId")]
         [ProducesResponseType(typeof(Coupon), (int)StatusCodes.Status200OK)]
         [ProducesResponseType((int)StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Coupon>> GetCouponByProductName([FromQuery]string productName)
+        public async Task<ActionResult<Coupon>> GetCouponByProductId([FromQuery]string productId)
         {
-            var coupon = await _couponRepository.GetCouponByProductNameAsync(productName);
+            var coupon = await _couponRepository.GetCouponByProductIdAsync(productId);
             if (coupon == null)
             {
-                _logger.LogInformation($"Coupon with ProductName: {productName} not exist");
+                _logger.LogInformation($"Coupon with ProductName: {productId} not exist");
                 return NotFound();
             }
 

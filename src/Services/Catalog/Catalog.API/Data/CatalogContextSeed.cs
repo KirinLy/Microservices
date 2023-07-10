@@ -21,19 +21,19 @@ namespace Catalog.API.Data
                 new Product
                 {
                     Id = "64a1a39f29628a040b3f4b6f",
-                    Name = "Product 1",
-                    Category = "Category 1",
-                    Price = 10.99m,
-                    Summary = "Summary 1",
+                    Name = "Iphone X",
+                    Category = "Iphone",
+                    Price = 10,
+                    Summary = "Iphone beauty",
                     ImgFile = "image1.jpg",
-                    Description = "Description 1"
+                    Description = "beauty beauty beauty"
                 },
                 new Product
                 {
                     Id = "64a1a3b11e8e30ed35c21ed0",
-                    Name = "Product 2",
-                    Category = "Category 2",
-                    Price = 19.99m,
+                    Name = "Samsung note 10",
+                    Category = "Samsung",
+                    Price = 19,
                     Summary = "Summary 2",
                     ImgFile = "image2.jpg",
                     Description = "Description 2"

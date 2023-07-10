@@ -20,22 +20,23 @@ namespace Discount.Grpc.Repositories
             return await _discountContext.QueryFirstOrDefaultAsync<Coupon>(sql, parameter);
         }
 
-        public async Task<Coupon> GetCouponByProductNameAsync(string productName)
+        public async Task<Coupon> GetCouponByProductIdAsync(string productId)
         {
             string sql = "Select * From Coupon Where ProductName = @ProductName";
-            var parameter = new {ProductName = productName};
+            var parameter = new {ProductName = productId};
 
             return await _discountContext.QueryFirstOrDefaultAsync<Coupon>(sql, parameter);
         }
 
         public async Task<Coupon> CreateCouponAsync(Coupon coupon)
         {
-            string sql = "Insert Into Coupon(Code, ProductName, Discount, Description) " +
-                         "Values (@Code, @ProductName, @Discount, @Description) " +
-                         "RETURNING Id, Code, ProductName, Discount, Description";
+            string sql = "Insert Into Coupon(Code, ProductId, ProductName, Discount, Description) " +
+                         "Values (@Code, @ProductId, @ProductName, @Discount, @Description) " +
+                         "RETURNING Id, Code, ProductId, ProductName, Discount, Description";
             var parameter = new
             {
                 Code = coupon.Code,
+                ProductId = coupon.ProductId,
                 ProductName = coupon.ProductName,
                 Discount = coupon.Discount,
                 Description = coupon.Description,
@@ -48,12 +49,13 @@ namespace Discount.Grpc.Repositories
         public async Task<bool> UpdateCouponAsync(Coupon coupon)
         {
             string sql = "Update Coupon " +
-                         "Set Code = @Code, ProductName = @ProductName, Discount = @Discount, Description = @Description " +
+                         "Set Code = @Code, ProductId = @ProductId, ProductName = @ProductName, Discount = @Discount, Description = @Description " +
                          "Where Id = @Id";
             var parameter = new
             {
                 Id = coupon.Id,
                 Code = coupon.Code,
+                ProductId = coupon.ProductId,
                 ProductName = coupon.ProductName,
                 Discount = coupon.Discount,
                 Description = coupon.Description,
