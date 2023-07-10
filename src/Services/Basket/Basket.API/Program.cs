@@ -1,5 +1,8 @@
 
 using Basket.API.Repositories;
+using Basket.API.Services;
+using Discount.Grpc.Protos;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Basket.API
 {
@@ -20,6 +23,9 @@ namespace Basket.API
                 option.Configuration = builder.Configuration.GetValue<string>("Cache:ConnectionString");
             });
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+            builder.Services.AddScoped<ICouponService, CouponService>();
+            builder.Services.AddGrpcClient<CouponProtoService.CouponProtoServiceClient>
+                (o => o.Address = new Uri(builder.Configuration.GetValue<string>("GrpcSettings:DiscountUrl")));
 
             var app = builder.Build();
 

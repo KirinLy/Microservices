@@ -19,12 +19,12 @@ namespace Discount.Grpc.Services
             _mapper = mapper;
         }
 
-        public override async Task<CouponModel> GetCoupon(GetCouponRequest request, ServerCallContext context)
+        public override async Task<CouponModel> GetCouponByProduct(GetCouponByProductRequest request, ServerCallContext context)
         {
-            var coupon = await _couponRepository.GetCouponAsync(request.Id);
+            var coupon = await _couponRepository.GetCouponByProductIdAsync(request.ProductId);
             if (coupon == null)
             {
-                _logger.LogInformation($"Coupon with Id: {request.Id} not exist");
+                _logger.LogInformation($"Coupon with ProductId: {request.ProductId} not exist");
                 return new CouponModel();
             }
 

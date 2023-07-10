@@ -22,8 +22,8 @@ namespace Discount.Grpc.Repositories
 
         public async Task<Coupon> GetCouponByProductIdAsync(string productId)
         {
-            string sql = "Select * From Coupon Where ProductName = @ProductName";
-            var parameter = new {ProductName = productId};
+            string sql = "Select * From Coupon Where ProductId = @ProductId";
+            var parameter = new {ProductId = productId};
 
             return await _discountContext.QueryFirstOrDefaultAsync<Coupon>(sql, parameter);
         }
