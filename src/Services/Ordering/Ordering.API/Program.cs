@@ -1,12 +1,9 @@
-
-using Basket.API.Repositories;
-using Basket.API.Services;
-using Discount.Grpc.Protos;
 using EventBus.Messages.Common;
+using EventBus.Messages.Events;
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
+using Ordering.API.EventBusConsumer;
 
-namespace Basket.API
+namespace Ordering.API
 {
     public class Program
     {
@@ -20,32 +17,34 @@ namespace Basket.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddStackExchangeRedisCache(option =>
-            {
-                option.Configuration = builder.Configuration.GetValue<string>("Cache:ConnectionString");
-            });
-            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
-            builder.Services.AddScoped<ICouponService, CouponService>();
-            builder.Services.AddAutoMapper(typeof(Program));
-
-
-            builder.Services.AddGrpcClient<CouponProtoService.CouponProtoServiceClient>
-                (o => o.Address = new Uri(builder.Configuration.GetValue<string>("GrpcSettings:DiscountUrl")));
 
             var rabbitMqSettings = builder.Configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
             builder.Services.AddMassTransit(
                 config =>
                 {
+                    config.AddConsumer<BasketCheckoutConsumer1>();
+                    config.AddConsumer<BasketCheckoutConsumer2>();
+
                     config.UsingRabbitMq((ctx, cfg) =>
                     {
-                        cfg.Host(rabbitMqSettings.Uri, cfg =>
+                        cfg.Host(rabbitMqSettings.Uri, cfgHost =>
                         {
-                            cfg.Username(rabbitMqSettings.UserName);
-                            cfg.Password(rabbitMqSettings.Password);
+                            cfgHost.Username(rabbitMqSettings.UserName);
+                            cfgHost.Password(rabbitMqSettings.Password);
+                        });
+                        cfg.ReceiveEndpoint(rabbitMqSettings.BasketCheckoutQueue1, cfgEndPoint =>
+                        {
+                            cfgEndPoint.ConfigureConsumer<BasketCheckoutConsumer1>(ctx);
+                        });
+                        cfg.ReceiveEndpoint(rabbitMqSettings.BasketCheckoutQueue2, cfgEndPoint =>
+                        {
+                            cfgEndPoint.ConfigureConsumer<BasketCheckoutConsumer2>(ctx);
                         });
                     });
-                });
+                });  
 
+            builder.Services.AddScoped<IConsumer<BasketCheckoutEvent1>, BasketCheckoutConsumer1>();
+            builder.Services.AddScoped<IConsumer<BasketCheckoutEvent>, BasketCheckoutConsumer2>();
 
             var app = builder.Build();
 
@@ -57,6 +56,8 @@ namespace Basket.API
             }
 
             app.UseAuthorization();
+
+
             app.MapControllers();
 
             app.Run();

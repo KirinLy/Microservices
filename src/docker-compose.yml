@@ -16,6 +16,9 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
